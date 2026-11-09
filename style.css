@@ -1,0 +1,51 @@
+html, body { margin: 0; background: #111; color: #ddd; font: 13px/1.4 -apple-system, system-ui, sans-serif; overflow: hidden; }
+a { color: #9cf; }
+#bar { position: fixed; top: 0; left: 0; right: 0; height: 28px; padding: 6px 12px; box-sizing: border-box; background: #1b1b1b; display: flex; gap: 16px; white-space: nowrap; overflow: hidden; }
+#help { position: fixed; bottom: 0; left: 0; right: 0; height: 26px; padding: 5px 12px; box-sizing: border-box; background: #1b1b1b; color: #999; white-space: nowrap; overflow: hidden; }
+canvas { display: block; position: fixed; top: 28px; left: 0; }
+body.annotator { background: #000; color: #fff; font: 12px/1.35 "Helvetica Neue", Helvetica, Arial, sans-serif; }
+/* the strip checkboxes: the browser's own, with their labels inverted against what's behind them */
+.strip-check { font-size: 12px; } /* no z-index: p5 adds these after the canvas so they're on top anyway, and a
+                                     z-index would stop the label blending with the image behind it */
+.strip-check label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.strip-check input { margin: 0; cursor: pointer; }
+.strip-check span { color: #fff; mix-blend-mode: difference; }
+.strip-check input:not(:checked) + span, .strip-check input:disabled + span { opacity: 0.5; }
+body.annotator canvas { top: 0; }
+body.compositor { background: #fff; }
+body.compositor canvas { top: 0; }
+/* above the canvas, which p5 adds at the end of the page and would otherwise paint over these */
+#caption, #download, #theme { z-index: 10; }
+#download, #theme { position: fixed; bottom: 24px; width: 14px; height: 14px; padding: 0; border: 0; background: none; cursor: pointer; line-height: 0; }
+#download { right: 24px; }
+#theme { right: 50px; }
+#download svg, #theme svg { width: 14px; height: 14px; }
+#theme .icon-night, body.night #theme .icon-day { display: none; }
+body.night #theme .icon-night { display: inline; }
+/* Credits and icons are white blended with "difference", so each pixel shows the inverse of whatever
+   is behind it: black on a white page, white on a black page, the negative of a painting over a painting. */
+#caption, #download, #theme { color: #fff; mix-blend-mode: difference; }
+#download:hover, #theme:hover { opacity: 0.6; }
+body.compositor .dim { opacity: 0.6; }
+body.compositor.night { background: #000; }
+#caption { position: fixed; left: 24px; bottom: 24px; max-width: calc(100vw - 48px); font: 12px/1.35 "Times New Roman", Times, serif; }
+#caption .credit + .credit { margin-top: 12px; }
+#caption a { color: inherit; text-decoration: none; }
+#caption a:hover { text-decoration: underline; }
+.upper { color: #f5c; } .lower { color: #4de; } .reject { color: #f66; }
+.chips { display: flex; gap: 4px; margin-top: -3px; }
+.chip { font: inherit; font-size: 12px; padding: 1px 8px; border-radius: 10px; border: 1px solid #444; background: #222; color: #888; cursor: pointer; }
+.chip[data-state="on"] { background: #1f3a22; border-color: #4a8; color: #9e9; }
+.chip[data-state="off"] { background: #3a1f1f; border-color: #a44; color: #f99; text-decoration: line-through; }
+.chip[data-state="na"] { opacity: 0.4; cursor: default; }
+/* segments grid: white page, three text tabs, strips in rows with plain gaps */
+body.segments { background: #fff; color: #000; height: 100vh; overflow: auto; font: 12px/1.35 "Helvetica Neue", Helvetica, Arial, sans-serif; } /* the page itself scrolls (html is set not to) */
+/* the tabs stack in a fixed column on the left; the grid starts to their right, so they never cover a strip */
+#tabs { position: fixed; top: 24px; left: 24px; width: 64px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
+#tabs a { color: #000; text-decoration: none; opacity: 0.5; }
+#tabs a.active, #tabs a:hover { opacity: 1; }
+#grid { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px; padding: 24px 24px 24px 112px; } /* 112 = 24 + tabs 64 + 24 */
+.strip { position: relative; overflow: hidden; display: block; flex: none; }
+.strip img { position: absolute; left: 0; display: block; }
+ul.home { font-size: 18px; line-height: 2; }
+body.page { overflow: auto; padding: 32px; }

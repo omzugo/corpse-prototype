@@ -1,0 +1,7 @@
+# Images are large and can be downloaded again with: python3 seed.py --hires && python3 seed.py --thumbs
+data/img/
+data/thumb/
+__pycache__/
+.DS_Store
+*.tmp
+*.tmp.jpg

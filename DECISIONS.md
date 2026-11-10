@@ -70,3 +70,8 @@ Newest entries at the bottom.
 - **Removed:** fold lines (F), seam guides (G), the S key (the download button does it), the ? key panel, and the live link from the annotator (the compositor re-reads annotations when you come back to its tab).
 - **Kept:** click to lock, ⌘-click to annotate, credits with links, download (full resolution, transparent beside narrower strips), day/night, 24px margins.
 - About 126 lines of code, down from 186, laid out in build order (1 pick · 2 line up the seams · 3 draw · 4 new figures and locking · 5 credits · 6 download and day/night).
+
+## Live site (2026-11-10)
+- **The prototype compositor is live** at https://omzugo.github.io/corpse-prototype/ (GitHub Pages, `gh-pages` branch). `sh publish_site.sh` rebuilds and republishes.
+- Only the 268 images that can appear in a figure are published, as 1600px copies (89 MB total; cached in `data/web/`). Downloads from the live site are therefore up to about 1600px per strip, not full resolution.
+- No annotator online. ⌘-click to annotate only works when running locally.

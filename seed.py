@@ -13,14 +13,15 @@ OUT = os.path.join(HERE, "data", "images.json")
 # Round 2 (2026-11-08): any form, not just bodies. Met "bat", "owl", "heron", "horse", "lion", "fish",
 # "church", "tower", "vase", "candlestick", "tree", "armor"; AIC "bat", "bird", "dog", "cathedral",
 # "lighthouse", "tree", "vase", "column", "still life", "landscape", "saint", "chair".
-# Round 3: portrait and animal paintings only, high resolution only.
-MET_QUERIES = ["portrait", "portrait of a woman", "portrait of a man", "young woman", "boy", "girl",
-               "dog", "horse", "cat", "cow", "sheep", "deer", "bird", "lion", "rooster"]
-AIC_QUERIES = ["portrait", "portrait of a woman", "portrait of a man", "self-portrait", "girl", "boy",
-               "dog", "horse", "cat", "cattle", "sheep", "bird", "lion", "deer", "rabbit"]
-PER_QUERY = 7
-PAINTINGS_ONLY = True
-MET_PAINTINGS_DEPARTMENT = 11  # European Paintings
+# Round 3 (2026-11-09): portrait and animal paintings only. Met (European Paintings) and AIC (paintings)
+# "portrait", "portrait of a woman", "portrait of a man", "young woman" / "self-portrait", "boy", "girl",
+# "dog", "horse", "cat", "cow" / "cattle", "sheep", "deer", "bird", "lion", "rooster" / "rabbit".
+# Round 4: figurines and statuettes, high resolution only.
+MET_QUERIES = ["figurine", "statuette", "terracotta figure", "bronze figure", "ivory figure", "porcelain figure"]
+AIC_QUERIES = ["figurine", "statuette", "figure", "standing figure", "seated figure", "tomb figure"]
+PER_QUERY = 6
+MET_DEPARTMENT = None          # e.g. 11 for European Paintings; None searches the whole museum
+AIC_ARTWORK_TYPE = "Sculpture" # e.g. "Painting"; None for any kind of artwork
 MIN_LONG_SIDE = 2000           # skip images whose original is smaller than this
 
 
@@ -40,8 +41,8 @@ def get(url, tries=3):
 def met(images, seen):
     for q in MET_QUERIES:
         params = {"q": q, "hasImages": "true", "limit": 60}
-        if PAINTINGS_ONLY:
-            params["departmentId"] = MET_PAINTINGS_DEPARTMENT
+        if MET_DEPARTMENT:
+            params["departmentId"] = MET_DEPARTMENT
         url = "https://collectionapi.metmuseum.org/public/collection/v1.1/search?" + urllib.parse.urlencode(params)
         try:
             ids = get(url).get("objectIDs") or []
@@ -81,8 +82,8 @@ def aic(images, seen):
     for q in AIC_QUERIES:
         params = {"q": q, "limit": 60,
                   "fields": "id,title,artist_title,date_display,medium_display,image_id,is_public_domain,thumbnail"}
-        if PAINTINGS_ONLY:
-            params["query[term][artwork_type_title.keyword]"] = "Painting"
+        if AIC_ARTWORK_TYPE:
+            params["query[term][artwork_type_title.keyword]"] = AIC_ARTWORK_TYPE
         url = "https://api.artic.edu/api/v1/artworks/search?" + urllib.parse.urlencode(params)
         added = 0
         for o in get(url)["data"]:

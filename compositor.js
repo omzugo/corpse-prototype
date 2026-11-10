@@ -125,9 +125,12 @@ function mousePressed(e) {
   if (e && e.target !== drawingContext.canvas) return; // clicks on credits and buttons aren't strip clicks
   const role = roleUnderMouse();
   if (!role || (e && e.button !== 0)) return;
-  if (e && (e.metaKey || e.ctrlKey)) window.open('annotator.html#' + encodeURIComponent(pick[role]), 'annotator');
+  if (e && (e.metaKey || e.ctrlKey) && LOCAL) window.open('annotator.html#' + encodeURIComponent(pick[role]), 'annotator');
   else locked[role] = !locked[role];
 }
+
+// Running on this computer (the annotator exists) rather than on the live site (it doesn't).
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
 
 // ---- 5. credits ----
 

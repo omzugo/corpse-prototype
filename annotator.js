@@ -4,7 +4,7 @@
 //   drag       a line's end to adjust it (sideways moves that end, up or down moves the whole line)
 //   scroll     zoom · hold Space and drag to pan · F to fit the window
 //   T M B      include or exclude the top / middle / bottom strip (or click its label)
-//   X reject · ← → previous / next · N next unannotated
+//   X reject · ← → previous / next · N next unannotated · H show or hide the caption and key guide
 // Each line is saved as fractions of the image: { y, x1, x2 }.
 // Helpers shared with the compositor (loading, saving, image cache) live in common.js.
 
@@ -16,6 +16,8 @@ let panning = null;              // while space-dragging: the last mouse positio
 let view = { x: 0, y: 0, s: 1 }; // where the image sits on screen, and its scale
 let fittedTo = null;             // id of the image the view was last fitted to
 let checkboxes = {};             // the browser's own checkboxes, one per strip
+let showText = false;            // H: show the artwork caption and key guide (hidden by default)
+const SHOW_LOUPE = false;        // the pixel magnifier; set to true to bring it back
 
 const COLORS = { upper: [150, 205, 235], lower: [235, 125, 65] };
 const MARGIN = 24, LEADING = 16;
@@ -84,7 +86,7 @@ function draw() {
     for (const name of ['upper', 'lower']) if (a[name]) drawLine(a[name], COLORS[name], img);
     drawLineInProgress(img);
     pop();
-    drawLoupe(img, a);
+    if (SHOW_LOUPE) drawLoupe(img, a);
   }
   drawText(a, img);
   updateCursor(img);
@@ -281,6 +283,7 @@ function keyPressed(e) {
   else if (key === 'x' || key === 'X') { ann().reject = !ann().reject; if (!ann().reject) delete ann().reject; persist(); }
   else if (key === 'n' || key === 'N') nextUnannotated();
   else if (key === 'f' || key === 'F') fittedTo = null;
+  else if (key === 'h' || key === 'H') showText = !showText;
   else if (keyCode === RIGHT_ARROW) go(idx + 1);
   else if (keyCode === LEFT_ARROW) go(idx - 1);
   return false;
@@ -323,8 +326,10 @@ function drawText(a, img) {
   push();
   blendMode(DIFFERENCE);
   noStroke();
-  drawCaption(a, img);
-  drawControls();
+  if (showText) {
+    drawCaption(a, img);
+    drawControls();
+  }
   blendMode(BLEND);
   pop();
   updateCheckboxes(a, img);

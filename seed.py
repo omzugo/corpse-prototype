@@ -16,10 +16,13 @@ OUT = os.path.join(HERE, "data", "images.json")
 # Round 3 (2026-11-09): portrait and animal paintings only. Met (European Paintings) and AIC (paintings)
 # "portrait", "portrait of a woman", "portrait of a man", "young woman" / "self-portrait", "boy", "girl",
 # "dog", "horse", "cat", "cow" / "cattle", "sheep", "deer", "bird", "lion", "rooster" / "rabbit".
-# Round 4: figurines and statuettes, high resolution only.
-MET_QUERIES = ["figurine", "statuette", "terracotta figure", "bronze figure", "ivory figure", "porcelain figure"]
-AIC_QUERIES = ["figurine", "statuette", "figure", "standing figure", "seated figure", "tomb figure"]
-PER_QUERY = 6
+# Round 4 (2026-11-09): figurines. Met "figurine", "statuette", "terracotta figure", "bronze figure",
+# "ivory figure", "porcelain figure"; AIC (sculpture) "figurine", "statuette", "figure", "standing figure",
+# "seated figure", "tomb figure".
+# Round 5: 20 more figurines, high resolution only.
+MET_QUERIES = ["seated figure", "standing female figure"]
+AIC_QUERIES = ["female figure", "male figure"]
+PER_QUERY = 5
 MET_DEPARTMENT = None          # e.g. 11 for European Paintings; None searches the whole museum
 AIC_ARTWORK_TYPE = "Sculpture" # e.g. "Painting"; None for any kind of artwork
 MIN_LONG_SIDE = 2000           # skip images whose original is smaller than this

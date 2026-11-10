@@ -1,5 +1,5 @@
 // Compositor: stacks a top, middle and bottom strip from three artworks so their seams meet.
-//   Space    a new figure (locked strips stay)
+//   Space    a new figure (locked strips stay); so does clicking the empty space around the figure
 //   click    lock or unlock a strip · ⌘-click to edit its lines in the annotator
 //   buttons  day / night, and download the figure as a full-resolution PNG
 // Helpers shared with the annotator (loading data and images, which strips an image can supply)
@@ -123,8 +123,9 @@ function roleUnderMouse() {
 
 function mousePressed(e) {
   if (e && e.target !== drawingContext.canvas) return; // clicks on credits and buttons aren't strip clicks
+  if (e && e.button !== 0) return;
   const role = roleUnderMouse();
-  if (!role || (e && e.button !== 0)) return;
+  if (!role) { newFigure(); return; } // clicked the empty space around the figure: show a new one
   if (e && (e.metaKey || e.ctrlKey) && LOCAL) window.open('annotator.html#' + encodeURIComponent(pick[role]), 'annotator');
   else locked[role] = !locked[role];
 }
